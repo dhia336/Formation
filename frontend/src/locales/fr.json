@@ -1,0 +1,90 @@
+    {
+        "Participants": {
+            "title": "Participants",
+            "name": "Nom",
+            "cin": "CIN",
+            "entreprise": "Entreprise",
+            "theme": "Thème",
+            "add": "Ajouter Participant",
+            "actions": "Actions",
+            "save": "Enregistrer",
+            "cancel": "Annuler",
+            "edit": "Modifier",
+            "delete": "Supprimer",
+            "search_name": "Rechercher par nom",
+            "filter_entreprise": "Filtrer par entreprise",
+            "filter_theme": "Filtrer par thème",
+            "search_filter": "Rechercher/Filtrer"
+        },
+        "Cycles": {
+            "title": "Cycles",
+            "theme": "Thème",
+            "start_date": "Date de début",
+            "end_date": "Date de fin",
+            "room": "Salle",
+            "add": "Ajouter Cycle",
+            "actions": "Actions",
+            "save": "Enregistrer",
+            "cancel": "Annuler",
+            "edit": "Modifier",
+            "delete": "Supprimer",
+            "filter_theme": "Filtrer par thème",
+            "all": "Tous",
+            "active_only": "Actifs seulement",
+            "search_filter": "Rechercher/Filtrer"
+        },
+        "Home": {
+            "welcome": "Bienvenue dans le système de gestion du centre de formation",
+            "login": "Connexion",
+            "register": "Inscription"
+        },
+        "Login": {
+            "title": "Connexion",
+            "username": "Nom d'utilisateur",
+            "password": "Mot de passe",
+            "submit": "Connexion",
+            "invalid": "Identifiants invalides"
+        },
+        "dashboard": {
+            "statistics": "Statistiques",
+            "loading": "Chargement des statistiques...",
+            "participants_count": "Participants",
+            "formateurs_count": "Formateurs",
+            "cycles_count": "Cycles",
+            "active_cycles": "Cycles actifs",
+            "avg_participants_per_cycle": "Moy. participants/cycle",
+            "recent_additions": "Ajouts récents (7 derniers jours)",
+            "participants_per_company": "Participants par entreprise",
+            "cycles_per_theme": "Cycles par thème",
+            "formateurs_per_specialty": "Formateurs par spécialité",
+            "top_companies": "Top 5 entreprises",
+            "top_themes": "Top 5 thèmes de formation",
+            "most_active_formateur": "Formateur le plus actif",
+            "formateur": "Formateur",
+            "cycle_count": "Nombre de cycles",
+            "company": "Entreprise",
+            "count": "Nombre",
+            "theme": "Thème",
+            "specialty": "Spécialité",
+            "no_data": "Aucune donnée"
+        },
+        "Formateurs": {
+            "title": "Formateurs",
+            "name": "Nom",
+            "cin": "CIN",
+            "specialty": "Spécialité",
+            "add": "Ajouter Formateur",
+            "actions": "Actions",
+            "save": "Enregistrer",
+            "cancel": "Annuler",
+            "edit": "Modifier",
+            "delete": "Supprimer"
+        },
+        "common": {
+            "dashboard": "Tableau de bord",
+            "participants": "Participants",
+            "formateurs": "Gérer les formateurs",
+            "cycles": "Cycles",
+            "logout": "Déconnexion"
+        }
+    }

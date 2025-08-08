@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import './i18n';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Home from './Home';
+import Login from './Login';
+import Dashboard from './Dashboard';
+import ProtectedRoute from './ProtectedRoute';
+import Participants from './Participants';
+import Formateurs from './Formateurs';
+import Cycles from './Cycles';
+import Navbar from './Navbar';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function ProtectedWithNavbar({ children }) {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <ProtectedRoute>
+      <Navbar />
+      {children}
+    </ProtectedRoute>
+  );
 }
 
-export default App
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<ProtectedWithNavbar><Dashboard /></ProtectedWithNavbar>} />
+        <Route path="/participants" element={<ProtectedWithNavbar><Participants /></ProtectedWithNavbar>} />
+        <Route path="/formateurs" element={<ProtectedWithNavbar><Formateurs /></ProtectedWithNavbar>} />
+        <Route path="/cycles" element={<ProtectedWithNavbar><Cycles /></ProtectedWithNavbar>} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;

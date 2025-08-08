@@ -1,0 +1,90 @@
+{
+	"Participants": {
+		"title": "Participants",
+		"name": "Name",
+		"cin": "CIN",
+		"entreprise": "Entreprise",
+		"theme": "Theme",
+		"add": "Add Participant",
+		"actions": "Actions",
+		"save": "Save",
+		"cancel": "Cancel",
+		"edit": "Edit",
+		"delete": "Delete",
+		"search_name": "Search by name",
+		"filter_entreprise": "Filter by entreprise",
+		"filter_theme": "Filter by theme",
+		"search_filter": "Search/Filter"
+	},
+	"Cycles": {
+		"title": "Cycles",
+		"theme": "Theme",
+		"start_date": "Start Date",
+		"end_date": "End Date",
+		"room": "Room",
+		"add": "Add Cycle",
+		"actions": "Actions",
+		"save": "Save",
+		"cancel": "Cancel",
+		"edit": "Edit",
+		"delete": "Delete",
+		"filter_theme": "Filter by theme",
+		"all": "All",
+		"active_only": "Active Only",
+		"search_filter": "Search/Filter"
+	},
+	"Home": {
+		"welcome": "Welcome to the Training Center Management System",
+		"login": "Login",
+		"register": "Register"
+	},
+	"Login": {
+		"title": "Login",
+		"username": "Username",
+		"password": "Password",
+		"submit": "Login",
+		"invalid": "Invalid credentials"
+	},
+		"dashboard": {
+			"statistics": "Statistics",
+			"loading": "Loading stats...",
+			"participants_count": "Participants",
+			"formateurs_count": "Formateurs",
+			"cycles_count": "Cycles",
+			"active_cycles": "Active Cycles",
+			"avg_participants_per_cycle": "Avg. Participants/Cycle",
+			"recent_additions": "Recent Additions (last 7 days)",
+			"participants_per_company": "Participants per Company",
+			"cycles_per_theme": "Cycles per Theme",
+			"formateurs_per_specialty": "Formateurs per Specialty",
+			"top_companies": "Top 5 Companies",
+			"top_themes": "Top 5 Training Themes",
+			"most_active_formateur": "Most Active Formateur",
+			"formateur": "Formateur",
+			"cycle_count": "Cycle Count",
+			"company": "Company",
+			"count": "Count",
+			"theme": "Theme",
+			"specialty": "Specialty",
+			"no_data": "No data"
+		},
+	"Formateurs": {
+		"title": "Formateurs",
+		"name": "Name",
+		"cin": "CIN",
+		"specialty": "Specialty",
+		"add": "Add Formateur",
+		"actions": "Actions",
+		"save": "Save",
+		"cancel": "Cancel",
+		"edit": "Edit",
+		"delete": "Delete"
+	},
+	"common": {
+		"dashboard": "Dashboard",
+		"participants": "Participants",
+		"formateurs": "Manage Formateurs",
+		"cycles": "Cycles",
+		"logout": "Logout"
+	}
+}
