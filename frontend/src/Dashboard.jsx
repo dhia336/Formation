@@ -35,25 +35,24 @@ function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      <LanguageSwitcher />
-  <h2><FaChartBar style={{marginRight:8}} />{t('common.dashboard')}</h2>
-  <button onClick={handleLogout}><FaStar style={{marginRight:6}} />{t('common.logout')}</button>
+      <h2><FaChartBar style={{ marginRight: 8 }} />{t('common.dashboard')}</h2>
+      <button onClick={handleLogout}><FaStar style={{ marginRight: 6 }} />{t('common.logout')}</button>
       <ExportButton />
       <nav style={{ margin: '20px 0' }}>
-        <Link to="/participants" className="btn"><FaUsers style={{marginRight:6}} />{t('common.participants')}</Link>
-        <Link to="/formateurs" className="btn"><FaChalkboardTeacher style={{marginRight:6}} />{t('common.formateurs', 'Manage Formateurs')}</Link>
-        <Link to="/cycles" className="btn"><FaLayerGroup style={{marginRight:6}} />{t('common.cycles')}</Link>
+        <Link to="/participants" className="btn"><FaUsers style={{ marginRight: 6 }} />{t('common.participants')}</Link>
+        <Link to="/formateurs" className="btn"><FaChalkboardTeacher style={{ marginRight: 6 }} />{t('common.formateurs', 'Manage Formateurs')}</Link>
+        <Link to="/cycles" className="btn"><FaLayerGroup style={{ marginRight: 6 }} />{t('common.cycles')}</Link>
       </nav>
       {error && <p className="error">{error}</p>}
       {stats ? (
         <div className="stats">
           <h3>{t('dashboard.statistics', 'Statistics')}</h3>
           <ul>
-            <li><FaUsers style={{marginRight:6}} />{t('dashboard.participants_count', 'Participants')}: {stats.participants}</li>
-            <li><FaChalkboardTeacher style={{marginRight:6}} />{t('dashboard.formateurs_count', 'Formateurs')}: {stats.formateurs}</li>
-            <li><FaLayerGroup style={{marginRight:6}} />{t('dashboard.cycles_count', 'Cycles')}: {stats.cycles}</li>
-            <li><FaLayerGroup style={{marginRight:6}} />{t('dashboard.active_cycles', 'Active Cycles')}: {stats.active_cycles}</li>
-            <li><FaChartBar style={{marginRight:6}} />{t('dashboard.avg_participants_per_cycle', 'Avg. Participants/Cycle')}: {stats.avg_participants_per_cycle?.toFixed(2)}</li>
+            <li><FaUsers style={{ marginRight: 6 }} />{t('dashboard.participants_count', 'Participants')}: {stats.participants}</li>
+            <li><FaChalkboardTeacher style={{ marginRight: 6 }} />{t('dashboard.formateurs_count', 'Formateurs')}: {stats.formateurs}</li>
+            <li><FaLayerGroup style={{ marginRight: 6 }} />{t('dashboard.cycles_count', 'Cycles')}: {stats.cycles}</li>
+            <li><FaLayerGroup style={{ marginRight: 6 }} />{t('dashboard.active_cycles', 'Active Cycles')}: {stats.active_cycles}</li>
+            <li><FaChartBar style={{ marginRight: 6 }} />{t('dashboard.avg_participants_per_cycle', 'Avg. Participants/Cycle')}: {stats.avg_participants_per_cycle?.toFixed(2)}</li>
           </ul>
           <h4>{t('dashboard.recent_additions', 'Recent Additions (last 7 days)')}</h4>
           <ul>

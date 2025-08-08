@@ -103,10 +103,10 @@ function Formateurs() {
       <h2>{t('Formateurs.title')}</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleCreate} style={{ marginBottom: '1em' }}>
-  <input name="nom_prenom" placeholder={t('Formateurs.name')} value={form.nom_prenom} onChange={handleChange} required />
-  <input name="specialite" placeholder={t('Formateurs.specialty')} value={form.specialite} onChange={handleChange} required />
-  <input name="direction" placeholder={t('Formateurs.direction')} value={form.direction} onChange={handleChange} required />
-  <input name="entreprise" placeholder={t('Formateurs.entreprise')} value={form.entreprise} onChange={handleChange} required />
+        <input name="nom_prenom" placeholder={t('Formateurs.name')} value={form.nom_prenom} onChange={handleChange} required />
+        <input name="specialite" placeholder={t('Formateurs.specialty')} value={form.specialite} onChange={handleChange} required />
+        <input name="direction" placeholder={t('Formateurs.direction')} value={form.direction} onChange={handleChange} required />
+        <input name="entreprise" placeholder={t('Formateurs.entreprise')} value={form.entreprise} onChange={handleChange} required />
         <button type="submit">{t('Formateurs.add')}</button>
       </form>
       <table>
@@ -114,7 +114,6 @@ function Formateurs() {
           <tr>
             <th>{t('Formateurs.id')}</th>
             <th>{t('Formateurs.name')}</th>
-            <th>{t('Formateurs.specialty')}</th>
             <th>{t('Formateurs.direction')}</th>
             <th>{t('Formateurs.entreprise')}</th>
             <th>{t('Formateurs.actions')}</th>
@@ -128,6 +127,8 @@ function Formateurs() {
                 {editId === f.id ? (
                   <input name="nom_prenom" value={editForm.nom_prenom} onChange={handleEditChange} />
                 ) : f.nom_prenom}
+              </td>
+              <td>
                 {editId === f.id ? (
                   <input name="direction" value={editForm.direction} onChange={handleEditChange} />
                 ) : f.direction}

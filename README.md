@@ -1,15 +1,18 @@
-# Formation Management System
 
-A full-stack web application for managing training centers, built with FastAPI (backend) and React (frontend). Supports JWT authentication, CRUD operations, statistics, CSV export, and multi-language UI (English, French, Arabic).
+# Training Management System
+
+A full-stack web application for managing training centers, built with FastAPI (backend) and React (frontend). Supports JWT authentication, CRUD operations, statistics, CSV export, and multi-language UI (Arabic by default, English, French). Tables are fully responsive and translation keys are managed in locale files.
 
 ## Features
 - JWT authentication (login/logout)
 - Manage participants, formateurs, and cycles (CRUD)
 - Advanced statistics dashboard
 - CSV export of all data
-- Responsive, modern UI with icons
-- Multi-language support (English, French, Arabic)
+- Responsive, modern UI with icons and tables that adapt to all screen sizes
+- Multi-language support (Arabic by default, English, French)
 - Protected routes and role-based access
+- Language switcher with instant UI update
+- All table headers and forms use translation keys from locale files
 
 ## Tech Stack
 - **Backend:** FastAPI, MySQL
@@ -28,6 +31,8 @@ A full-stack web application for managing training centers, built with FastAPI (
 	python main.py
 	```
 
+Backend runs on [http://localhost:8000](http://localhost:8000)
+
 ### Frontend
 1. Install dependencies:
 	```bash
@@ -39,42 +44,42 @@ A full-stack web application for managing training centers, built with FastAPI (
 	```
 3. Access the app at [http://localhost:5173](http://localhost:5173)
 
+Default language is Arabic. You can switch languages at any time using the language switcher in the UI.
+
 ## Usage
 - Login with your admin credentials.
 - Use the navbar to navigate between dashboard, participants, formateurs, and cycles.
-- Add, edit, delete, and filter records.
+- Add, edit, delete, and filter records. All tables are scrollable and responsive.
 - View statistics and export data as CSV.
-- Switch languages using the language switcher.
+- Switch languages instantly using the language switcher (Arabic, French, English).
 
 ## Folder Structure
 ```
 backend/
-  main.py
-  requirements.txt
-  app/
-	 config.py
-	 database.py
-	 main.py
-	 security.py
-	 routes/
-		auth.py
-		participant.py
-		formateur.py
-		cycle.py
-frontend/
-  src/
-	 App.jsx
-	 Navbar.jsx
-	 Dashboard.jsx
-	 Participants.jsx
-	 Formateurs.jsx
-	 Cycles.jsx
-	 LanguageSwitcher.jsx
-	 api.js
-	 i18n.js
-	 locales/
-		en.json
-		fr.json
-		ar.json
-	 App.css
+	app/
+		config.py
+		database.py
+		main.py
+		security.py
+		routes/
+			auth.py
+			participant.py
+			formateur.py
+			cycles.py
+	frontend/
+		src/
+			App.jsx
+			Navbar.jsx
+			Dashboard.jsx
+			Participants.jsx
+			Formateurs.jsx
+			Cycles.jsx
+			LanguageSwitcher.jsx
+			api.js
+			i18n.js
+			locales/
+				en.json
+				fr.json
+				ar.json
+			App.css
 ```

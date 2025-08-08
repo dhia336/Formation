@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 const LanguageSwitcher = () => {
@@ -9,9 +8,9 @@ const LanguageSwitcher = () => {
   };
   return (
     <div className="language-switcher">
-      <button className={current === 'en' ? 'active' : ''} onClick={() => changeLanguage('en')}>English</button>
-      <button className={current === 'fr' ? 'active' : ''} onClick={() => changeLanguage('fr')}>Français</button>
-      <button className={current === 'ar' ? 'active' : ''} onClick={() => changeLanguage('ar')}>العربية</button>
+      <button className={current === 'en' ? 'active' : 'inactive'} onClick={() => changeLanguage('en')}>English</button>
+      <button className={current === 'fr' ? 'active' : 'inactive'} onClick={() => changeLanguage('fr')}>Français</button>
+      <button className={current === 'ar' ? 'active' : 'inactive'} onClick={() => changeLanguage('ar')}>العربية</button>
     </div>
   );
 };
