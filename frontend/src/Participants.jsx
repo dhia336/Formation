@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import api from './api';
 import { useTranslation } from 'react-i18next';
@@ -10,9 +9,9 @@ function Participants() {
   const { t } = useTranslation();
   const [participants, setParticipants] = useState([]);
   const [error, setError] = useState('');
-  const [form, setForm] = useState({ nom_prenom: '', cin: '', entreprise: '', theme_part: '' });
+  const [form, setForm] = useState({ nom_prenom: '', cin: '', entreprise: '', tel_fix: '', fax: '', tel_port: '', mail: '', theme_part: '', num_salle: '', date_debut: '' });
   const [editId, setEditId] = useState(null);
-  const [editForm, setEditForm] = useState({ nom_prenom: '', cin: '', entreprise: '', theme_part: '' });
+  const [editForm, setEditForm] = useState({ nom_prenom: '', cin: '', entreprise: '', tel_fix: '', fax: '', tel_port: '', mail: '', theme_part: '', num_salle: '', date_debut: '' });
   const [filters, setFilters] = useState({ nom: '', entreprise: '', theme: '' });
   const token = localStorage.getItem('token');
 
@@ -48,7 +47,13 @@ function Participants() {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/participants', { ...form }, {
+      const params = new URLSearchParams();
+      Object.entries(form).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          params.append(key, value);
+        }
+      });
+      await api.post(`/participants?${params.toString()}`, '', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setForm({ nom_prenom: '', cin: '', entreprise: '', theme_part: '' });
@@ -71,7 +76,13 @@ function Participants() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/participants/${editId}`, { ...editForm }, {
+      const params = new URLSearchParams();
+      Object.entries(editForm).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          params.append(key, value);
+        }
+      });
+      await api.put(`/participants/${editId}?${params.toString()}`, '', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEditId(null);
@@ -97,7 +108,7 @@ function Participants() {
   };
 
     return (
-      <div className="crud-container">
+  <div className="crud-container" style={{overflowX: 'auto', maxWidth: '100vw'}}>
         <LanguageSwitcher />
         <h2><FaUsers style={{marginRight:8}} />{t('Participants.title', 'Participants')}</h2>
         {error && <p className="error">{error}</p>}
@@ -105,7 +116,13 @@ function Participants() {
           <input name="nom_prenom" placeholder={t('Participants.name', 'Name')} value={form.nom_prenom} onChange={handleChange} required />
           <input name="cin" placeholder={t('Participants.cin', 'CIN')} value={form.cin} onChange={handleChange} required />
           <input name="entreprise" placeholder={t('Participants.entreprise', 'Entreprise')} value={form.entreprise} onChange={handleChange} required />
+          <input name="tel_fix" placeholder={t('Participants.tel_fix', 'Landline')} value={form.tel_fix} onChange={handleChange} />
+          <input name="fax" placeholder={t('Participants.fax', 'Fax')} value={form.fax} onChange={handleChange} />
+          <input name="tel_port" placeholder={t('Participants.tel_port', 'Mobile')} value={form.tel_port} onChange={handleChange} />
+          <input name="mail" placeholder={t('Participants.mail', 'Email')} value={form.mail} onChange={handleChange} />
           <input name="theme_part" placeholder={t('Participants.theme', 'Theme')} value={form.theme_part} onChange={handleChange} required />
+          <input name="num_salle" placeholder={t('Participants.num_salle', 'Room Number')} value={form.num_salle} onChange={handleChange} />
+          <input name="date_debut" type="date" placeholder={t('Participants.date_debut', 'Start Date')} value={form.date_debut} onChange={handleChange} />
           <button type="submit"><FaUserPlus style={{marginRight:6}} />{t('Participants.add', 'Add Participant')}</button>
         </form>
         <form style={{marginBottom:'1em',display:'flex',flexWrap:'wrap',gap:'0.7em',alignItems:'center'}}>
@@ -114,19 +131,25 @@ function Participants() {
           <input name="theme" placeholder={t('Participants.filter_theme', 'Filter by theme')} value={filters.theme} onChange={handleFilterChange} />
           <button type="button" onClick={fetchParticipants}><FaSearch style={{marginRight:6}} />{t('Participants.search_filter', 'Search/Filter')}</button>
         </form>
-        <table>
+  <table style={{minWidth: '900px', width: '100%'}}>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>{t('Participants.name', 'Name')}</th>
-              <th>{t('Participants.cin', 'CIN')}</th>
-              <th><FaBuilding style={{marginRight:6}} />{t('Participants.entreprise', 'Entreprise')}</th>
-              <th>{t('Participants.theme', 'Theme')}</th>
-              <th>{t('Participants.actions', 'Actions')}</th>
+              <th>{t('Participants.id')}</th>
+              <th>{t('Participants.nom_prenom')}</th>
+              <th>{t('Participants.cin')}</th>
+              <th>{t('Participants.entreprise')}</th>
+              <th>{t('Participants.tel_fix')}</th>
+              <th>{t('Participants.fax')}</th>
+              <th>{t('Participants.tel_port')}</th>
+              <th>{t('Participants.mail')}</th>
+              <th>{t('Participants.theme_part')}</th>
+              <th>{t('Participants.num_salle')}</th>
+              <th>{t('Participants.date_debut')}</th>
+              <th>{t('Participants.actions')}</th>
             </tr>
           </thead>
           <tbody>
-            {participants.map(p => (
+            {participants.map((p) => (
               <tr key={p.id}>
                 <td>{p.id}</td>
                 <td>
@@ -146,8 +169,38 @@ function Participants() {
                 </td>
                 <td>
                   {editId === p.id ? (
+                    <input name="tel_fix" value={editForm.tel_fix} onChange={handleEditChange} />
+                  ) : p.tel_fix}
+                </td>
+                <td>
+                  {editId === p.id ? (
+                    <input name="fax" value={editForm.fax} onChange={handleEditChange} />
+                  ) : p.fax}
+                </td>
+                <td>
+                  {editId === p.id ? (
+                    <input name="tel_port" value={editForm.tel_port} onChange={handleEditChange} />
+                  ) : p.tel_port}
+                </td>
+                <td>
+                  {editId === p.id ? (
+                    <input name="mail" value={editForm.mail} onChange={handleEditChange} />
+                  ) : p.mail}
+                </td>
+                <td>
+                  {editId === p.id ? (
                     <input name="theme_part" value={editForm.theme_part} onChange={handleEditChange} />
                   ) : p.theme_part}
+                </td>
+                <td>
+                  {editId === p.id ? (
+                    <input name="num_salle" value={editForm.num_salle} onChange={handleEditChange} />
+                  ) : p.num_salle}
+                </td>
+                <td>
+                  {editId === p.id ? (
+                    <input name="date_debut" type="date" value={editForm.date_debut} onChange={handleEditChange} />
+                  ) : p.date_debut}
                 </td>
                 <td>
                   {editId === p.id ? (

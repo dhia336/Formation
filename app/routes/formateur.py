@@ -42,20 +42,17 @@ def get_formateur(formateur_id: int, admin: str = Depends(get_current_admin)):
 @router.post("/formateurs", status_code=status.HTTP_201_CREATED)
 def create_formateur(
     nom_prenom: str,
-    cin: str,
     specialite: str,
-    admin: str = Depends(get_current_admin),
-    tel_fix: str = None,
-    fax: str = None,
-    tel_port: str = None,
-    mail: str = None
+    direction: str,
+    entreprise: str,
+    admin: str = Depends(get_current_admin)
 ):
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
         cursor.execute(
-            """INSERT INTO formateur (nom_prenom, cin, specialite, tel_fix, fax, tel_port, mail) VALUES (%s, %s, %s, %s, %s, %s, %s)""",
-            (nom_prenom, cin, specialite, tel_fix, fax, tel_port, mail)
+            """INSERT INTO formateur (nom_prenom, specialite, direction, entreprise) VALUES (%s, %s, %s, %s)""",
+            (nom_prenom, specialite, direction, entreprise)
         )
         formateur_id = cursor.lastrowid
         conn.commit()
@@ -71,13 +68,10 @@ def create_formateur(
 def update_formateur(
     formateur_id: int,
     nom_prenom: str = None,
-    cin: str = None,
     specialite: str = None,
-    admin: str = Depends(get_current_admin),
-    tel_fix: str = None,
-    fax: str = None,
-    tel_port: str = None,
-    mail: str = None
+    direction: str = None,
+    entreprise: str = None,
+    admin: str = Depends(get_current_admin)
 ):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -92,24 +86,15 @@ def update_formateur(
     if nom_prenom is not None:
         update_fields.append("nom_prenom = %s")
         params.append(nom_prenom)
-    if cin is not None:
-        update_fields.append("cin = %s")
-        params.append(cin)
     if specialite is not None:
         update_fields.append("specialite = %s")
         params.append(specialite)
-    if tel_fix is not None:
-        update_fields.append("tel_fix = %s")
-        params.append(tel_fix)
-    if fax is not None:
-        update_fields.append("fax = %s")
-        params.append(fax)
-    if tel_port is not None:
-        update_fields.append("tel_port = %s")
-        params.append(tel_port)
-    if mail is not None:
-        update_fields.append("mail = %s")
-        params.append(mail)
+    if direction is not None:
+        update_fields.append("direction = %s")
+        params.append(direction)
+    if entreprise is not None:
+        update_fields.append("entreprise = %s")
+        params.append(entreprise)
     if not update_fields:
         cursor.close()
         conn.close()

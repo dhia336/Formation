@@ -154,8 +154,42 @@ input:focus, select:focus, textarea:focus {
     gap: 0.5em;
     align-items: stretch;
   }
-  .crud-container table, .crud-container th, .crud-container td {
+  .crud-container table,
+  .crud-container th,
+  .crud-container td {
     font-size: 0.95em;
+    padding: 0.5em 0.3em;
+  }
+  .crud-container table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+  .crud-container th, .crud-container td {
+    min-width: 120px;
+    white-space: nowrap;
+  }
+  .crud-container .inline-edit-form {
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: stretch;
+    width: 100%;
+  }
+}
+
+/* Inline editing form styling */
+.inline-edit-form {
+  display: flex;
+  gap: 0.7em;
+  align-items: center;
+  margin-bottom: 0.5em;
+  flex-wrap: wrap;
+}
+@media (max-width: 700px) {
+  .inline-edit-form {
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: stretch;
   }
 }
 

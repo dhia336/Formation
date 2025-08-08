@@ -7,9 +7,9 @@ function Formateurs() {
   const { t } = useTranslation();
   const [formateurs, setFormateurs] = useState([]);
   const [error, setError] = useState('');
-  const [form, setForm] = useState({ nom_prenom: '', cin: '', specialite: '' });
+  const [form, setForm] = useState({ nom_prenom: '', specialite: '', direction: '', entreprise: '' });
   const [editId, setEditId] = useState(null);
-  const [editForm, setEditForm] = useState({ nom_prenom: '', cin: '', specialite: '' });
+  const [editForm, setEditForm] = useState({ nom_prenom: '', specialite: '', direction: '', entreprise: '' });
   // Labels now come from i18n
   const token = localStorage.getItem('token');
 
@@ -40,10 +40,16 @@ function Formateurs() {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/formateurs', { ...form }, {
+      const params = new URLSearchParams();
+      Object.entries(form).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          params.append(key, value);
+        }
+      });
+      await api.post(`/formateurs?${params.toString()}`, '', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setForm({ nom_prenom: '', cin: '', specialite: '' });
+      setForm({ nom_prenom: '', specialite: '', direction: '', entreprise: '' });
       fetchFormateurs();
     } catch (err) {
       setError('Failed to create formateur');
@@ -54,15 +60,22 @@ function Formateurs() {
     setEditId(formateur.id);
     setEditForm({
       nom_prenom: formateur.nom_prenom,
-      cin: formateur.cin,
-      specialite: formateur.specialite
+      specialite: formateur.specialite,
+      direction: formateur.direction,
+      entreprise: formateur.entreprise
     });
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/formateurs/${editId}`, { ...editForm }, {
+      const params = new URLSearchParams();
+      Object.entries(editForm).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          params.append(key, value);
+        }
+      });
+      await api.put(`/formateurs/${editId}?${params.toString()}`, '', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEditId(null);
@@ -90,18 +103,20 @@ function Formateurs() {
       <h2>{t('Formateurs.title')}</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleCreate} style={{ marginBottom: '1em' }}>
-        <input name="nom_prenom" placeholder={t('Formateurs.name')} value={form.nom_prenom} onChange={handleChange} required />
-        <input name="cin" placeholder={t('Formateurs.cin')} value={form.cin} onChange={handleChange} required />
-        <input name="specialite" placeholder={t('Formateurs.specialty')} value={form.specialite} onChange={handleChange} required />
+  <input name="nom_prenom" placeholder={t('Formateurs.name')} value={form.nom_prenom} onChange={handleChange} required />
+  <input name="specialite" placeholder={t('Formateurs.specialty')} value={form.specialite} onChange={handleChange} required />
+  <input name="direction" placeholder={t('Formateurs.direction')} value={form.direction} onChange={handleChange} required />
+  <input name="entreprise" placeholder={t('Formateurs.entreprise')} value={form.entreprise} onChange={handleChange} required />
         <button type="submit">{t('Formateurs.add')}</button>
       </form>
       <table>
         <thead>
           <tr>
-            <th>ID</th>
+            <th>{t('Formateurs.id')}</th>
             <th>{t('Formateurs.name')}</th>
-            <th>{t('Formateurs.cin')}</th>
             <th>{t('Formateurs.specialty')}</th>
+            <th>{t('Formateurs.direction')}</th>
+            <th>{t('Formateurs.entreprise')}</th>
             <th>{t('Formateurs.actions')}</th>
           </tr>
         </thead>
@@ -113,16 +128,14 @@ function Formateurs() {
                 {editId === f.id ? (
                   <input name="nom_prenom" value={editForm.nom_prenom} onChange={handleEditChange} />
                 ) : f.nom_prenom}
+                {editId === f.id ? (
+                  <input name="direction" value={editForm.direction} onChange={handleEditChange} />
+                ) : f.direction}
               </td>
               <td>
                 {editId === f.id ? (
-                  <input name="cin" value={editForm.cin} onChange={handleEditChange} />
-                ) : f.cin}
-              </td>
-              <td>
-                {editId === f.id ? (
-                  <input name="specialite" value={editForm.specialite} onChange={handleEditChange} />
-                ) : f.specialite}
+                  <input name="entreprise" value={editForm.entreprise} onChange={handleEditChange} />
+                ) : f.entreprise}
               </td>
               <td>
                 {editId === f.id ? (

@@ -77,14 +77,32 @@ def create_participant(
 ):
     conn = get_db_connection()
     cursor = conn.cursor()
-    
+    columns = ["nom_prenom", "cin", "entreprise"]
+    values = [nom_prenom, cin, entreprise]
+    if tel_fix is not None:
+        columns.append("tel_fix")
+        values.append(tel_fix)
+    if fax is not None:
+        columns.append("fax")
+        values.append(fax)
+    if tel_port is not None:
+        columns.append("tel_port")
+        values.append(tel_port)
+    if mail is not None:
+        columns.append("mail")
+        values.append(mail)
+    if theme_part is not None:
+        columns.append("theme_part")
+        values.append(theme_part)
+    if num_salle is not None:
+        columns.append("num_salle")
+        values.append(num_salle)
+    if date_debut is not None:
+        columns.append("date_debut")
+        values.append(date_debut)
     try:
-        cursor.execute(
-            """INSERT INTO participant 
-            (nom_prenom, cin, entreprise, tel_fix, fax, tel_port, mail, theme_part, num_salle, date_debut)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-            (nom_prenom, cin, entreprise, tel_fix, fax, tel_port, mail, theme_part, num_salle, date_debut)
-        )
+        query = f"INSERT INTO participant ({', '.join(columns)}) VALUES ({', '.join(['%s']*len(values))})"
+        cursor.execute(query, values)
         participant_id = cursor.lastrowid
         conn.commit()
     except mysql.connector.Error as err:
@@ -93,7 +111,6 @@ def create_participant(
     finally:
         cursor.close()
         conn.close()
-    
     return {"id": participant_id, "message": "Participant created successfully"}
 
 @router.put("/participants/{participant_id}")
@@ -113,7 +130,6 @@ def update_participant(
 ):
     conn = get_db_connection()
     cursor = conn.cursor()
-    
     # Get current values
     cursor.execute("SELECT * FROM participant WHERE id = %s", (participant_id,))
     current = cursor.fetchone()
@@ -121,11 +137,9 @@ def update_participant(
         cursor.close()
         conn.close()
         raise HTTPException(status_code=404, detail="Participant not found")
-    
     # Prepare update fields
     update_fields = []
     params = []
-    
     if nom_prenom is not None:
         update_fields.append("nom_prenom = %s")
         params.append(nom_prenom)
@@ -156,15 +170,12 @@ def update_participant(
     if date_debut is not None:
         update_fields.append("date_debut = %s")
         params.append(date_debut)
-    
     if not update_fields:
         cursor.close()
         conn.close()
         raise HTTPException(status_code=400, detail="No fields to update")
-    
     query = "UPDATE participant SET " + ", ".join(update_fields) + " WHERE id = %s"
     params.append(participant_id)
-    
     try:
         cursor.execute(query, params)
         conn.commit()
@@ -174,7 +185,6 @@ def update_participant(
     finally:
         cursor.close()
         conn.close()
-    
     return {"message": "Participant updated successfully"}
 
 @router.delete("/participants/{participant_id}")
