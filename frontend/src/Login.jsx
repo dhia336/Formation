@@ -3,7 +3,7 @@ import api from './api';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
-
+import Magnet from './utils/magnet';
 function Login() {
   const { t } = useTranslation();
   const [username, setUsername] = useState('');
@@ -35,8 +35,8 @@ function Login() {
       <form onSubmit={handleSubmit} className='login-form'>
         <input type="text" placeholder={t('Login.username', 'Username')} value={username} onChange={e => setUsername(e.target.value)} required />
         <input type="password" placeholder={t('Login.password', 'Password')} value={password} onChange={e => setPassword(e.target.value)} required /> <br />
-        <button type="submit">{t('Login.submit', 'Login')}</button>
-        <Link to="/" className="btn">{t('Home.home', 'Home Page')}</Link>
+        <><button type="submit">{t('Login.submit', 'Login')}</button></>
+        <><Link to="/" className="btn">{t('Home.home', 'Home Page')}</Link></>
       </form>
       {error && <p className="error">{error}</p>}
     </div>

@@ -31,6 +31,7 @@ function App() {
         <Route path="/formateurs" element={<ProtectedWithNavbar><Formateurs /></ProtectedWithNavbar>} />
         <Route path="/cycles" element={<ProtectedWithNavbar><Cycles /></ProtectedWithNavbar>} />
         <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/404" element={<h1>f</h1>} />
       </Routes>
     </Router>
   );

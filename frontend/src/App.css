@@ -1,5 +1,5 @@
-/* nav-link */
-/* Main Navbar styles */
+/*General stuff*/
+/* navbar */
 .main-navbar {
   display: flex;
   justify-content: space-between;
@@ -58,13 +58,13 @@
 .nav-logout:hover {
   background: #b71c1c;
 }
-
 @media (max-width: 700px) {
   .main-navbar {
     flex-direction: column;
     align-items: stretch;
     padding: 0.5em 0.5em;
     gap: 0.7em;
+    width: 87vw;
   }
 
   .nav-left {
@@ -80,7 +80,7 @@
 
   .nav-link,
   .nav-logout {
-    width: 100%;
+    width: 80%;
     justify-content: flex-start;
   }
 }
@@ -253,13 +253,16 @@ form button:hover,
 button:hover,
 .btn:hover {
   background: #183366;
+  transform: scale(1.1);
 }
+Link:hover{
+  transform: scale(1.1);
 
+}
 .language-switcher {
   display: flex;
   gap: 0.5em;
   margin-bottom: 1em;
-  justify-content: flex-end;
 }
 
 .language-switcher button {
@@ -285,10 +288,17 @@ button:hover,
   background: rgba(255, 255, 255, 0.539);
   color: black;
 }
-
+@media (max-width: 700px)  {
+  .language-switcher{
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  .language-switcher button{
+    
+  }
+}
 body {
   margin: 0;
-  font-family: 'Inter', Arial, sans-serif;
   background: #f7f8fa;
   color: #222;
 }
@@ -482,4 +492,28 @@ button {
   align-items: center;
   justify-content: center;
 
+}
+.home-BG{
+  height: 100vh;
+  width: 95vw;
+  background-image: url(../public/formation1.jpg);
+  background-color: black;
+  background-repeat: no-repeat;
+  background-size: cover;
+  top: 0px;
+  position:fixed;
+  border-radius: 15px;
+  filter: blur(10px) opacity(.90);
+  z-index: -1;
+
+}
+.home-hero{
+  background-color: rgba(255, 255, 255, 0.541);
+  width: 90vw;
+  border-radius: 15px;
+  padding-bottom: 40px;
+  margin-top: 30px;
+}
+.space{
+  height: 100vh;
 }
