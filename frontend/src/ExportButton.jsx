@@ -1,6 +1,8 @@
 import api from './api';
+import { useTranslation } from 'react-i18next';
 
 function ExportButton() {
+  const { t } = useTranslation();
   const handleExport = async () => {
     const token = localStorage.getItem('token');
     const res = await api.get('/export', {
@@ -17,7 +19,7 @@ function ExportButton() {
   };
 
   return (
-    <button onClick={handleExport}>Export All Data (CSV)</button>
+    <button onClick={handleExport}>{t('Home.export','Export All Data (CSV)',)} </button>
   );
 }
 

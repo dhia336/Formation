@@ -30,15 +30,29 @@ function Login() {
 
   return (
     <div className="login-container">
-      <LanguageSwitcher />
-      <h2>{t('Login.title', 'Login')}</h2>
-      <form onSubmit={handleSubmit} className='login-form'>
-        <input type="text" placeholder={t('Login.username', 'Username')} value={username} onChange={e => setUsername(e.target.value)} required />
-        <input type="password" placeholder={t('Login.password', 'Password')} value={password} onChange={e => setPassword(e.target.value)} required /> <br />
-        <><button type="submit">{t('Login.submit', 'Login')}</button></>
-        <><Link to="/" className="btn">{t('Home.home', 'Home Page')}</Link></>
-      </form>
-      {error && <p className="error">{error}</p>}
+      <div className="login-form">
+        <LanguageSwitcher />
+        <h2>{t('Login.title', 'Login')}</h2>
+        <form onSubmit={handleSubmit}>
+          <input 
+            type="text" 
+            placeholder={t('Login.username', 'Username')} 
+            value={username} 
+            onChange={e => setUsername(e.target.value)} 
+            required 
+          />
+          <input 
+            type="password" 
+            placeholder={t('Login.password', 'Password')} 
+            value={password} 
+            onChange={e => setPassword(e.target.value)} 
+            required 
+          />
+          <br /><br />
+          <center><button type="submit">{t('Login.submit', 'Login')}</button></center>
+        </form>
+        {error && <p className="error">{error}</p>}
+      </div>
     </div>
   );
 }

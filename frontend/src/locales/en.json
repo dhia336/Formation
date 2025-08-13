@@ -53,7 +53,8 @@
 		"welcome": "Welcome to the Training Center Management System",
 		"login": "Login",
 		"register": "Register",
-		"home":"Home Page"
+		"home":"Home Page",
+		"export":"Export All Data (CSV)"
 	},
 	"Login": {
 		"title": "Login",

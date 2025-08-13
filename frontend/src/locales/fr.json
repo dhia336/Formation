@@ -47,7 +47,8 @@
         "welcome": "Bienvenue dans le système de gestion du centre de formation",
         "login": "Connexion",
         "register": "Inscription",
-        "home": "Page Principale"
+        "home": "Page Principale",
+        "export": "Exporter toutes les données (CSV)"
     },
     "Login": {
         "title": "Connexion",
