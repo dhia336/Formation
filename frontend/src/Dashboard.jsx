@@ -39,7 +39,7 @@ function Dashboard() {
         <img src="/formation2.jpg" alt="Dashboard" className="dashboard-header-img" />
       </div>
       <h2 className="dashboard-title"><FaChartBar style={{ marginRight: 8 }} />{t('common.dashboard')}</h2>
-      <ExportButton />
+      <center> <ExportButton /></center>
       <br />
       {error && <p className="error">{error}</p>}
       {stats ? (
