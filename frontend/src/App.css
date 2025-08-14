@@ -1,3 +1,202 @@
+/* Login Hero Image */
+.login-hero-img-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+.login-hero-img {
+  max-width: 320px;
+  width: 80vw;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px var(--shadow);
+  object-fit: cover;
+  aspect-ratio: 4/3;
+}
+
+@media (max-width: 600px) {
+  .login-hero-img {
+    max-width: 95vw;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Dashboard Header Image */
+.dashboard-header-img-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+.dashboard-header-img {
+  max-width: 600px;
+  width: 90vw;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px var(--shadow);
+  object-fit: cover;
+  aspect-ratio: 16/5;
+}
+
+@media (max-width: 900px) {
+  .dashboard-header-img {
+    max-width: 98vw;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Dashboard Redesign */
+.dashboard-title {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+}
+
+.stats-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  margin-top: 2rem;
+  align-items: flex-start;
+}
+
+@media (max-width: 1100px) {
+  .stats-grid {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.2rem;
+  flex: 1 1 350px;
+  min-width: 250px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: var(--white);
+  border-radius: 18px;
+  padding: 2rem 1.2rem 1.2rem 1.2rem;
+  box-shadow: 0 8px 24px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 16px 40px var(--shadow-dark);
+}
+.stat-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.7rem;
+  opacity: 0.9;
+}
+.stat-label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  text-align: center;
+}
+.stat-value {
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.stats-section {
+  flex: 2 1 600px;
+  min-width: 300px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px var(--shadow);
+  padding: 2rem 1.5rem;
+  margin-top: 0;
+}
+
+.stats-section h4 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.7rem;
+  font-size: 1.2rem;
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+.stats-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.2rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+.stats-list li {
+  background: linear-gradient(135deg, var(--accent), var(--primary-light));
+  color: var(--primary-dark);
+  border-radius: 12px;
+  padding: 0.7rem 1.2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 119, 182, 0.13);
+}
+.stats-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 1.2rem;
+}
+.stats-table-wrap table {
+  min-width: 320px;
+  width: 100%;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.98);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+.stats-table-wrap th, .stats-table-wrap td {
+  padding: 0.8rem 0.7rem;
+  border-bottom: 1px solid rgba(0, 119, 182, 0.08);
+  text-align: left;
+}
+.stats-table-wrap th {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: var(--white);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.stats-table-wrap tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 900px) {
+  .stats-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+  .stats-section {
+    padding: 1.2rem 0.7rem;
+  }
+}
+@media (max-width: 600px) {
+  .stats-cards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .stats-section {
+    padding: 1rem 0.3rem;
+  }
+  .dashboard-title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+}
 /* CSS Variables for Color Palette */
 :root {
   --primary-dark: #03045E;

@@ -30,6 +30,9 @@ function Login() {
 
   return (
     <div className="login-container">
+      <div className="login-hero-img-wrap">
+        <img src="/formation1.jpg" alt="Formation" className="login-hero-img" />
+      </div>
       <div className="login-form">
         <LanguageSwitcher />
         <h2>{t('Login.title', 'Login')}</h2>
