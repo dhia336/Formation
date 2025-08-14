@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
 import { FaCheckSquare, FaRegSquare, FaChevronLeft, FaChevronRight, FaInfoCircle } from 'react-icons/fa';
 import api from './api';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +24,66 @@ function Participants() {
   const [editForm, setEditForm] = useState({ nom_prenom: '', cin: '', entreprise: '', tel_fix: '', fax: '', tel_port: '', mail: '', theme_part: '', num_salle: '', date_debut: '' });
   const [filters, setFilters] = useState({ nom: '', entreprise: '', theme: '', date_debut: '' });
   const token = localStorage.getItem('token');
+
+  // GSAP refs
+  const tableRef = useRef();
+  const cardsRef = useRef();
+  const formRef = useRef();
+
+  useEffect(() => {
+    // Animate table rows on scroll
+    if (tableRef.current) {
+      gsap.utils.toArray(tableRef.current.querySelectorAll('tbody tr')).forEach((row, i) => {
+        gsap.fromTo(row, { opacity: 0, y: 40 }, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          delay: i * 0.05,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: row,
+            start: 'top 90%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      });
+    }
+    // Animate mobile cards on scroll
+    if (cardsRef.current) {
+      gsap.utils.toArray(cardsRef.current.querySelectorAll('.mobile-card')).forEach((card, i) => {
+        gsap.fromTo(card, { opacity: 0, y: 40 }, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          delay: i * 0.05,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 90%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      });
+    }
+    // Animate forms on scroll
+    if (formRef.current) {
+      gsap.fromTo(formRef.current, { opacity: 0, y: 30 }, {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: formRef.current,
+          start: 'top 90%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+    }
+    // Clean up triggers on unmount
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, [participants]);
 
   const fetchParticipants = async () => {
     try {
@@ -169,8 +232,8 @@ function Participants() {
       <h2><FaUsers style={{ marginRight: 8 }} />{t('Participants.title', 'Participants')}</h2>
       {error && <p className="error">{error}</p>}
       
-      {/* Create Form */}
-      <form onSubmit={handleCreate}>
+  {/* Create Form */}
+  <form onSubmit={handleCreate} ref={formRef}>
         <input name="nom_prenom" placeholder={t('Participants.name', 'Name')} value={form.nom_prenom} onChange={handleChange} required />
         <input name="cin" placeholder={t('Participants.cin', 'CIN')} value={form.cin} onChange={handleChange} required />
         <input name="entreprise" placeholder={t('Participants.entreprise', 'Entreprise')} value={form.entreprise} onChange={handleChange} required />
@@ -194,8 +257,8 @@ function Participants() {
         <button type="button" onClick={fetchParticipants}><FaSearch style={{ marginRight: 6 }} />{t('Participants.search_filter', 'Search/Filter')}</button>
       </form>
 
-      {/* Desktop Table View */}
-  <div className="table-responsive">
+    {/* Desktop Table View */}
+  <div className="table-responsive" ref={tableRef}>
         <table className="crud-table">
           <thead>
             <tr>
@@ -253,8 +316,8 @@ function Participants() {
           </div>
         </div>
       </div>
-      {/* Mobile Card View & Pagination */}
-      <div className="mobile-cards">
+  {/* Mobile Card View & Pagination */}
+  <div className="mobile-cards" ref={cardsRef}>
         {participants.map((p) => (
           <div key={p.id} className="mobile-card">
             <div className="mobile-card-header">

@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
 import { FaCheckSquare, FaRegSquare, FaChevronLeft, FaChevronRight, FaInfoCircle } from 'react-icons/fa';
 import api from './api';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +22,66 @@ function Cycles() {
   const [editForm, setEditForm] = useState({ num_act: '', theme: '', date_deb: '', date_fin: '', num_salle: '', for1: '', for2: '', for3: '' });
   const [filters, setFilters] = useState({ theme: '', active: '' });
   const token = localStorage.getItem('token');
+
+  // GSAP refs
+  const tableRef = useRef();
+  const cardsRef = useRef();
+  const formRef = useRef();
+
+  useEffect(() => {
+    // Animate table rows on scroll
+    if (tableRef.current) {
+      gsap.utils.toArray(tableRef.current.querySelectorAll('tbody tr')).forEach((row, i) => {
+        gsap.fromTo(row, { opacity: 0, y: 40 }, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          delay: i * 0.05,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: row,
+            start: 'top 90%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      });
+    }
+    // Animate mobile cards on scroll
+    if (cardsRef.current) {
+      gsap.utils.toArray(cardsRef.current.querySelectorAll('.mobile-card')).forEach((card, i) => {
+        gsap.fromTo(card, { opacity: 0, y: 40 }, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          delay: i * 0.05,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 90%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      });
+    }
+    // Animate forms on scroll
+    if (formRef.current) {
+      gsap.fromTo(formRef.current, { opacity: 0, y: 30 }, {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: formRef.current,
+          start: 'top 90%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+    }
+    // Clean up triggers on unmount
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, [cycles]);
 
   const fetchCycles = async () => {
     try {
@@ -149,8 +212,8 @@ function Cycles() {
       <h2><FaLayerGroup style={{ marginRight: 8 }} />{t('Cycles.title')}</h2>
       {error && <p className="error">{error}</p>}
       
-      {/* Create Form */}
-      <form onSubmit={handleCreate}>
+  {/* Create Form */}
+  <form onSubmit={handleCreate} ref={formRef}>
         <input name="num_act" placeholder={t('Cycles.num_act')} value={form.num_act} onChange={handleChange} required />
         <input name="theme" placeholder={t('Cycles.theme')} value={form.theme} onChange={handleChange} required />
         <input name="date_deb" type="date" placeholder={t('Cycles.date_deb')} value={form.date_deb} onChange={handleChange} required />
@@ -173,8 +236,8 @@ function Cycles() {
         <button type="button" onClick={fetchCycles}><FaSearch style={{ marginRight: 6 }} />{t('Cycles.search_filter')}</button>
       </form>
 
-      {/* Desktop Table View */}
-      <div className="table-responsive">
+  {/* Desktop Table View */}
+  <div className="table-responsive" ref={tableRef}>
         <table className="crud-table">
           <thead>
             <tr>
@@ -230,8 +293,8 @@ function Cycles() {
       </div>
   {/* Add .zebra, .icon-btn, .icon-tooltip, .crud-table, .crud-table-footer, .bulk-delete-btn, .pagination styles in App.css for full effect */}
 
-      {/* Mobile Card View */}
-      <div className="mobile-cards">
+  {/* Mobile Card View */}
+  <div className="mobile-cards" ref={cardsRef}>
         {cycles.map((c) => (
           <div key={c.id} className="mobile-card">
             <div className="mobile-card-header">
