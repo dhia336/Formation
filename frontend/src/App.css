@@ -1,3 +1,125 @@
+/* CRUD Table Redesign */
+.crud-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: rgba(255,255,255,0.98);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px var(--shadow);
+  margin-bottom: 0.5rem;
+}
+.crud-table th, .crud-table td {
+  padding: 1rem 0.8rem;
+  border-bottom: 1px solid rgba(0, 119, 182, 0.08);
+  text-align: left;
+  vertical-align: middle;
+}
+.crud-table th {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: var(--white);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+.crud-table tr.zebra {
+  background: var(--gray-100);
+}
+.crud-table tr:hover {
+  background: rgba(0, 119, 182, 0.07);
+}
+.table-check {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--primary);
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.table-check:focus {
+  outline: 2px solid var(--primary-light);
+}
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--primary-dark);
+  font-size: 1.1rem;
+  margin-right: 0.3rem;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  transition: background 0.2s;
+  position: relative;
+}
+.icon-btn:hover {
+  background: var(--accent-light);
+  color: var(--primary);
+}
+.icon-tooltip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  margin-left: 0.5rem;
+  opacity: 0.7;
+}
+.crud-table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 0.5rem 0.5rem 0.5rem;
+  background: none;
+  border-radius: 0 0 16px 16px;
+  gap: 1rem;
+}
+.bulk-delete-btn {
+  background: linear-gradient(135deg, var(--danger), #c82333);
+  color: var(--white);
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1.2rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.13);
+  transition: all 0.2s;
+}
+.bulk-delete-btn:disabled {
+  background: var(--gray-300);
+  color: var(--gray-600);
+  cursor: not-allowed;
+}
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.pagination button {
+  background: var(--accent-light);
+  color: var(--primary-dark);
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.pagination button:disabled {
+  background: var(--gray-200);
+  color: var(--gray-600);
+  cursor: not-allowed;
+}
+.pagination span {
+  font-size: 1rem;
+  color: var(--primary-dark);
+  font-weight: 500;
+}
 /* Login Hero Image */
 .login-hero-img-wrap {
   width: 100%;

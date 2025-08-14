@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FaCheckSquare, FaRegSquare, FaChevronLeft, FaChevronRight, FaInfoCircle } from 'react-icons/fa';
 import api from './api';
 import { useTranslation } from 'react-i18next';
 import Modal from './Modal';
@@ -7,6 +8,10 @@ import { FaLayerGroup, FaCalendarAlt, FaEdit, FaTrash, FaSearch, FaDoorOpen, FaP
 function Cycles() {
   const { t } = useTranslation();
   const [cycles, setCycles] = useState([]);
+  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
+  const [total, setTotal] = useState(0);
   const [error, setError] = useState('');
   const [form, setForm] = useState({ num_act: '', theme: '', date_deb: '', date_fin: '', num_salle: '', for1: '', for2: '', for3: '' });
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -17,14 +22,16 @@ function Cycles() {
 
   const fetchCycles = async () => {
     try {
-      const params = {};
+      const params = { page, page_size: pageSize };
       if (filters.theme) params.theme = filters.theme;
       if (filters.active) params.active_only = filters.active === 'true';
       const res = await api.get('/cycles', {
         headers: { Authorization: `Bearer ${token}` },
         params
       });
-      setCycles(res.data);
+      setCycles(res.data.items || res.data);
+      setTotal(res.data.total || res.data.length || 0);
+      setSelected([]);
     } catch (err) {
       setError('Failed to fetch cycles');
     }
@@ -33,7 +40,25 @@ function Cycles() {
   useEffect(() => {
     fetchCycles();
     // eslint-disable-next-line
-  }, [filters]);
+  }, [filters, page]);
+  // Bulk selection
+  const toggleSelectAll = () => {
+    if (selected.length === cycles.length) setSelected([]);
+    else setSelected(cycles.map(c => c.id));
+  };
+  const toggleSelect = (id) => {
+    setSelected(selected.includes(id) ? selected.filter(s => s !== id) : [...selected, id]);
+  };
+  const handleBulkDelete = async () => {
+    if (selected.length === 0) return;
+    if (!window.confirm(t('Cycles.confirm_bulk_delete', 'Delete selected cycles?'))) return;
+    try {
+      await Promise.all(selected.map(id => api.delete(`/cycles/${id}`, { headers: { Authorization: `Bearer ${token}` } })));
+      fetchCycles();
+    } catch {
+      setError('Bulk delete failed');
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -150,9 +175,14 @@ function Cycles() {
 
       {/* Desktop Table View */}
       <div className="table-responsive">
-        <table>
+        <table className="crud-table">
           <thead>
             <tr>
+              <th style={{width:'36px',textAlign:'center',position:'sticky',left:0,background:'#fff',zIndex:2}}>
+                <button type="button" className="table-check" onClick={toggleSelectAll} title={t('Cycles.select_all','Select all')}>
+                  {selected.length === cycles.length && cycles.length > 0 ? <FaCheckSquare /> : <FaRegSquare />}
+                </button>
+              </th>
               <th>{t('Cycles.num_act')}</th>
               <th>{t('Cycles.theme')}</th>
               <th>{t('Cycles.date_deb')}</th>
@@ -165,8 +195,13 @@ function Cycles() {
             </tr>
           </thead>
           <tbody>
-            {cycles.map((c) => (
-              <tr key={c.id}>
+            {cycles.map((c, idx) => (
+              <tr key={c.id} className={idx%2===0?"zebra":""}>
+                <td style={{textAlign:'center',position:'sticky',left:0,background:'#fff',zIndex:1}}>
+                  <button type="button" className="table-check" onClick={()=>toggleSelect(c.id)} title={selected.includes(c.id)?t('Cycles.deselect','Deselect'):t('Cycles.select','Select')}>
+                    {selected.includes(c.id) ? <FaCheckSquare /> : <FaRegSquare />}
+                  </button>
+                </td>
                 <td>{c.num_act}</td>
                 <td>{c.theme}</td>
                 <td>{c.date_deb}</td>
@@ -176,14 +211,24 @@ function Cycles() {
                 <td>{c.for2}</td>
                 <td>{c.for3}</td>
                 <td>
-                  <button onClick={() => handleEdit(c)}><FaEdit style={{ marginRight: 4 }} />{t('Cycles.edit')}</button>
-                  <button onClick={() => handleDelete(c.id)}><FaTrash style={{ marginRight: 4 }} />{t('Cycles.delete')}</button>
+                  <button onClick={() => handleEdit(c)} title={t('Cycles.edit','Edit')} className="icon-btn"><FaEdit /></button>
+                  <button onClick={() => handleDelete(c.id)} title={t('Cycles.delete','Delete')} className="icon-btn"><FaTrash /></button>
+                  <span className="icon-tooltip"><FaInfoCircle /> {t('Cycles.actions_hint','Edit or delete')}</span>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <div className="crud-table-footer">
+          <button onClick={handleBulkDelete} disabled={selected.length===0} className="bulk-delete-btn">{t('Cycles.bulk_delete','Delete Selected')}</button>
+          <div className="pagination">
+            <button onClick={()=>setPage(page-1)} disabled={page===1}><FaChevronLeft /></button>
+            <span>{t('common.page','Page')} {page} / {Math.ceil(total/pageSize)||1}</span>
+            <button onClick={()=>setPage(page+1)} disabled={page>=Math.ceil(total/pageSize)}><FaChevronRight /></button>
+          </div>
+        </div>
       </div>
+  {/* Add .zebra, .icon-btn, .icon-tooltip, .crud-table, .crud-table-footer, .bulk-delete-btn, .pagination styles in App.css for full effect */}
 
       {/* Mobile Card View */}
       <div className="mobile-cards">

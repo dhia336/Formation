@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FaCheckSquare, FaRegSquare, FaChevronLeft, FaChevronRight, FaInfoCircle } from 'react-icons/fa';
 import api from './api';
 import { useTranslation } from 'react-i18next';
 import Modal from './Modal';
@@ -7,6 +8,10 @@ import { FaUserPlus, FaUserEdit, FaTrash, FaChalkboardTeacher } from 'react-icon
 function Formateurs() {
   const { t } = useTranslation();
   const [formateurs, setFormateurs] = useState([]);
+  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
+  const [total, setTotal] = useState(0);
   const [error, setError] = useState('');
   const [form, setForm] = useState({ nom_prenom: '', specialite: '', direction: '', entreprise: '' });
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -16,10 +21,14 @@ function Formateurs() {
 
   const fetchFormateurs = async () => {
     try {
+      const params = { page, page_size: pageSize };
       const res = await api.get('/formateurs', {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
+        params
       });
-      setFormateurs(res.data);
+      setFormateurs(res.data.items || res.data);
+      setTotal(res.data.total || res.data.length || 0);
+      setSelected([]);
     } catch (err) {
       setError('Failed to fetch formateurs');
     }
@@ -28,7 +37,25 @@ function Formateurs() {
   useEffect(() => {
     fetchFormateurs();
     // eslint-disable-next-line
-  }, []);
+  }, [page]);
+  // Bulk selection
+  const toggleSelectAll = () => {
+    if (selected.length === formateurs.length) setSelected([]);
+    else setSelected(formateurs.map(f => f.id));
+  };
+  const toggleSelect = (id) => {
+    setSelected(selected.includes(id) ? selected.filter(s => s !== id) : [...selected, id]);
+  };
+  const handleBulkDelete = async () => {
+    if (selected.length === 0) return;
+    if (!window.confirm(t('Formateurs.confirm_bulk_delete', 'Delete selected formateurs?'))) return;
+    try {
+      await Promise.all(selected.map(id => api.delete(`/formateurs/${id}`, { headers: { Authorization: `Bearer ${token}` } })));
+      fetchFormateurs();
+    } catch {
+      setError('Bulk delete failed');
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -122,9 +149,14 @@ function Formateurs() {
 
       {/* Desktop Table View */}
       <div className="table-responsive">
-        <table>
+        <table className="crud-table">
           <thead>
             <tr>
+              <th style={{width:'36px',textAlign:'center',position:'sticky',left:0,background:'#fff',zIndex:2}}>
+                <button type="button" className="table-check" onClick={toggleSelectAll} title={t('Formateurs.select_all','Select all')}>
+                  {selected.length === formateurs.length && formateurs.length > 0 ? <FaCheckSquare /> : <FaRegSquare />}
+                </button>
+              </th>
               <th>{t('Formateurs.name')}</th>
               <th>{t('Formateurs.specialty')}</th>
               <th>{t('Formateurs.direction')}</th>
@@ -133,21 +165,36 @@ function Formateurs() {
             </tr>
           </thead>
           <tbody>
-            {formateurs.map(f => (
-              <tr key={f.id}>
+            {formateurs.map((f, idx) => (
+              <tr key={f.id} className={idx%2===0?"zebra":""}>
+                <td style={{textAlign:'center',position:'sticky',left:0,background:'#fff',zIndex:1}}>
+                  <button type="button" className="table-check" onClick={()=>toggleSelect(f.id)} title={selected.includes(f.id)?t('Formateurs.deselect','Deselect'):t('Formateurs.select','Select')}>
+                    {selected.includes(f.id) ? <FaCheckSquare /> : <FaRegSquare />}
+                  </button>
+                </td>
                 <td>{f.nom_prenom}</td>
                 <td>{f.specialite}</td>
                 <td>{f.direction}</td>
                 <td>{f.entreprise}</td>
                 <td>
-                  <button onClick={() => handleEdit(f)}><FaUserEdit style={{ marginRight: 4 }} />{t('Formateurs.edit')}</button>
-                  <button onClick={() => handleDelete(f.id)}><FaTrash style={{ marginRight: 4 }} />{t('Formateurs.delete')}</button>
+                  <button onClick={() => handleEdit(f)} title={t('Formateurs.edit','Edit')} className="icon-btn"><FaUserEdit /></button>
+                  <button onClick={() => handleDelete(f.id)} title={t('Formateurs.delete','Delete')} className="icon-btn"><FaTrash /></button>
+                  <span className="icon-tooltip"><FaInfoCircle /> {t('Formateurs.actions_hint','Edit or delete')}</span>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <div className="crud-table-footer">
+          <button onClick={handleBulkDelete} disabled={selected.length===0} className="bulk-delete-btn">{t('Formateurs.bulk_delete','Delete Selected')}</button>
+          <div className="pagination">
+            <button onClick={()=>setPage(page-1)} disabled={page===1}><FaChevronLeft /></button>
+            <span>{t('common.page','Page')} {page} / {Math.ceil(total/pageSize)||1}</span>
+            <button onClick={()=>setPage(page+1)} disabled={page>=Math.ceil(total/pageSize)}><FaChevronRight /></button>
+          </div>
+        </div>
       </div>
+  {/* Add .zebra, .icon-btn, .icon-tooltip, .crud-table, .crud-table-footer, .bulk-delete-btn, .pagination styles in App.css for full effect */}
 
       {/* Mobile Card View */}
       <div className="mobile-cards">

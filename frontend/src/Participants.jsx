@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FaCheckSquare, FaRegSquare, FaChevronLeft, FaChevronRight, FaInfoCircle } from 'react-icons/fa';
 import api from './api';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -9,25 +10,40 @@ import { FaUserPlus, FaUserEdit, FaTrash, FaSearch, FaBuilding, FaUsers } from '
 function Participants() {
   const { t } = useTranslation();
   const [participants, setParticipants] = useState([]);
+  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
+  const [total, setTotal] = useState(0);
   const [error, setError] = useState('');
   const [form, setForm] = useState({ nom_prenom: '', cin: '', entreprise: '', tel_fix: '', fax: '', tel_port: '', mail: '', theme_part: '', num_salle: '', date_debut: '' });
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingParticipant, setEditingParticipant] = useState(null);
   const [editForm, setEditForm] = useState({ nom_prenom: '', cin: '', entreprise: '', tel_fix: '', fax: '', tel_port: '', mail: '', theme_part: '', num_salle: '', date_debut: '' });
-  const [filters, setFilters] = useState({ nom: '', entreprise: '', theme: '' });
+  const [filters, setFilters] = useState({ nom: '', entreprise: '', theme: '', date_debut: '' });
   const token = localStorage.getItem('token');
 
   const fetchParticipants = async () => {
     try {
-      const params = {};
+      const params = {
+        limit: pageSize,
+        skip: (page - 1) * pageSize
+      };
       if (filters.nom) params.nom = filters.nom;
       if (filters.entreprise) params.entreprise = filters.entreprise;
       if (filters.theme) params.theme = filters.theme;
+      if (filters.date_debut) params.date_debut = filters.date_debut;
       const res = await api.get('/participants', {
         headers: { Authorization: `Bearer ${token}` },
         params
       });
-      setParticipants(res.data);
+      if (Array.isArray(res.data)) {
+        setParticipants(res.data);
+        setTotal(res.data.length < pageSize && page === 1 ? res.data.length : page * pageSize + (res.data.length === pageSize ? pageSize : 0));
+      } else {
+        setParticipants(res.data.items || res.data);
+        setTotal(res.data.total || res.data.length || 0);
+      }
+      setSelected([]);
     } catch (err) {
       setError('Failed to fetch participants');
     }
@@ -36,7 +52,31 @@ function Participants() {
   useEffect(() => {
     fetchParticipants();
     // eslint-disable-next-line
-  }, [filters]);
+  }, [filters, page]);
+
+  // Reset to first page on filter change
+  useEffect(() => {
+    setPage(1);
+    // eslint-disable-next-line
+  }, [filters.nom, filters.entreprise, filters.theme, filters.date_debut]);
+  // Bulk selection
+  const toggleSelectAll = () => {
+    if (selected.length === participants.length) setSelected([]);
+    else setSelected(participants.map(p => p.id));
+  };
+  const toggleSelect = (id) => {
+    setSelected(selected.includes(id) ? selected.filter(s => s !== id) : [...selected, id]);
+  };
+  const handleBulkDelete = async () => {
+    if (selected.length === 0) return;
+    if (!window.confirm(t('Participants.confirm_bulk_delete', 'Delete selected participants?'))) return;
+    try {
+      await Promise.all(selected.map(id => api.delete(`/participants/${id}`, { headers: { Authorization: `Bearer ${token}` } })));
+      fetchParticipants();
+    } catch {
+      setError('Bulk delete failed');
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -145,18 +185,25 @@ function Participants() {
       </form>
 
       {/* Filter Form */}
-      <form style={{ marginBottom: '1em', display: 'flex', flexWrap:'nowrap', gap: '0.7em', alignItems: 'stretch' }}>
+      <form className="crud-filter-form">
         <input name="nom" placeholder={t('Participants.search_name', 'Search by name')} value={filters.nom} onChange={handleFilterChange} />
         <input name="entreprise" placeholder={t('Participants.filter_entreprise', 'Filter by entreprise')} value={filters.entreprise} onChange={handleFilterChange} />
         <input name="theme" placeholder={t('Participants.filter_theme', 'Filter by theme')} value={filters.theme} onChange={handleFilterChange} />
+        <input name="date_debut" type="date" placeholder={t('Participants.filter_date_debut', 'Start date')}
+          value={filters.date_debut} onChange={handleFilterChange} />
         <button type="button" onClick={fetchParticipants}><FaSearch style={{ marginRight: 6 }} />{t('Participants.search_filter', 'Search/Filter')}</button>
       </form>
 
       {/* Desktop Table View */}
-      <div className="table-responsive">
-        <table>
+  <div className="table-responsive">
+        <table className="crud-table">
           <thead>
             <tr>
+              <th style={{width:'36px',textAlign:'center',position:'sticky',left:0,background:'#fff',zIndex:2}}>
+                <button type="button" className="table-check" onClick={toggleSelectAll} title={t('Participants.select_all','Select all')}>
+                  {selected.length === participants.length && participants.length > 0 ? <FaCheckSquare /> : <FaRegSquare />}
+                </button>
+              </th>
               <th>{t('Participants.nom_prenom')}</th>
               <th>{t('Participants.cin')}</th>
               <th>{t('Participants.entreprise')}</th>
@@ -171,8 +218,13 @@ function Participants() {
             </tr>
           </thead>
           <tbody>
-            {participants.map((p) => (
-              <tr key={p.id}>
+            {participants.map((p, idx) => (
+              <tr key={p.id} className={idx%2===0?"zebra":""}>
+                <td style={{textAlign:'center',position:'sticky',left:0,background:'#fff',zIndex:1}}>
+                  <button type="button" className="table-check" onClick={()=>toggleSelect(p.id)} title={selected.includes(p.id)?t('Participants.deselect','Deselect'):t('Participants.select','Select')}>
+                    {selected.includes(p.id) ? <FaCheckSquare /> : <FaRegSquare />}
+                  </button>
+                </td>
                 <td>{p.nom_prenom}</td>
                 <td>{p.cin}</td>
                 <td>{p.entreprise}</td>
@@ -184,16 +236,24 @@ function Participants() {
                 <td>{p.num_salle}</td>
                 <td>{p.date_debut}</td>
                 <td>
-                  <button onClick={() => handleEdit(p)}><FaUserEdit style={{ marginRight: 4 }} />{t('Participants.edit', 'Edit')}</button>
-                  <button onClick={() => handleDelete(p.id)}><FaTrash style={{ marginRight: 4 }} />{t('Participants.delete', 'Delete')}</button>
+                  <button onClick={() => handleEdit(p)} title={t('Participants.edit','Edit')} className="icon-btn"><FaUserEdit /></button>
+                  <button onClick={() => handleDelete(p.id)} title={t('Participants.delete','Delete')} className="icon-btn"><FaTrash /></button>
+                  <span className="icon-tooltip"><FaInfoCircle /> {t('Participants.actions_hint','Edit or delete')}</span>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+  <div className="crud-table-footer">
+          <button onClick={handleBulkDelete} disabled={selected.length===0} className="bulk-delete-btn">{t('Participants.bulk_delete','Delete Selected')}</button>
+          <div className="pagination">
+            <button onClick={()=>setPage(page-1)} disabled={page===1}><FaChevronLeft /></button>
+            <span>{t('common.page','Page')} {page} / {Math.max(1, Math.ceil(total/pageSize))}</span>
+            <button onClick={()=>setPage(page+1)} disabled={participants.length < pageSize}><FaChevronRight /></button>
+          </div>
+        </div>
       </div>
-
-      {/* Mobile Card View */}
+      {/* Mobile Card View & Pagination */}
       <div className="mobile-cards">
         {participants.map((p) => (
           <div key={p.id} className="mobile-card">
@@ -240,7 +300,13 @@ function Participants() {
             </div>
           </div>
         ))}
-      </div>
+        <div className="pagination mobile-pagination">
+          <button onClick={()=>setPage(page-1)} disabled={page===1}><FaChevronLeft /></button>
+          <span>{t('common.page','Page')} {page} / {Math.max(1, Math.ceil(total/pageSize))}</span>
+          <button onClick={()=>setPage(page+1)} disabled={participants.length < pageSize}><FaChevronRight /></button>
+        </div>
+  </div>
+
 
       {/* Edit Modal */}
       <Modal 
