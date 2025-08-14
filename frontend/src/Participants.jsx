@@ -157,7 +157,6 @@ function Participants() {
         <table>
           <thead>
             <tr>
-              <th>{t('Participants.id')}</th>
               <th>{t('Participants.nom_prenom')}</th>
               <th>{t('Participants.cin')}</th>
               <th>{t('Participants.entreprise')}</th>
@@ -174,7 +173,6 @@ function Participants() {
           <tbody>
             {participants.map((p) => (
               <tr key={p.id}>
-                <td>{p.id}</td>
                 <td>{p.nom_prenom}</td>
                 <td>{p.cin}</td>
                 <td>{p.entreprise}</td>

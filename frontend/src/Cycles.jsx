@@ -153,7 +153,6 @@ function Cycles() {
         <table>
           <thead>
             <tr>
-              <th>{t('Cycles.id')}</th>
               <th>{t('Cycles.num_act')}</th>
               <th>{t('Cycles.theme')}</th>
               <th>{t('Cycles.date_deb')}</th>
@@ -168,7 +167,6 @@ function Cycles() {
           <tbody>
             {cycles.map((c) => (
               <tr key={c.id}>
-                <td>{c.id}</td>
                 <td>{c.num_act}</td>
                 <td>{c.theme}</td>
                 <td>{c.date_deb}</td>

@@ -125,7 +125,6 @@ function Formateurs() {
         <table>
           <thead>
             <tr>
-              <th>{t('Formateurs.id')}</th>
               <th>{t('Formateurs.name')}</th>
               <th>{t('Formateurs.specialty')}</th>
               <th>{t('Formateurs.direction')}</th>
@@ -136,7 +135,6 @@ function Formateurs() {
           <tbody>
             {formateurs.map(f => (
               <tr key={f.id}>
-                <td>{f.id}</td>
                 <td>{f.nom_prenom}</td>
                 <td>{f.specialite}</td>
                 <td>{f.direction}</td>
