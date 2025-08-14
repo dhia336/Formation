@@ -92,8 +92,8 @@ function Cycles() {
         headers: { Authorization: `Bearer ${token}` },
         params
       });
-      setCycles(res.data.items || res.data);
-      setTotal(res.data.total || res.data.length || 0);
+  setCycles(res.data.items || res.data);
+  setTotal(res.data.total || res.data.length || 0);
       setSelected([]);
     } catch (err) {
       setError('Failed to fetch cycles');
@@ -286,7 +286,7 @@ function Cycles() {
           <button onClick={handleBulkDelete} disabled={selected.length===0} className="bulk-delete-btn">{t('Cycles.bulk_delete','Delete Selected')}</button>
           <div className="pagination">
             <button onClick={()=>setPage(page-1)} disabled={page===1}><FaChevronLeft /></button>
-            <span>{t('common.page','Page')} {page} / {Math.ceil(total/pageSize)||1}</span>
+            <span>{t('common.page','Page')} {page} / {Math.max(1, Math.ceil(total/pageSize))}</span>
             <button onClick={()=>setPage(page+1)} disabled={page>=Math.ceil(total/pageSize)}><FaChevronRight /></button>
           </div>
         </div>

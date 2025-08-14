@@ -89,8 +89,8 @@ function Formateurs() {
         headers: { Authorization: `Bearer ${token}` },
         params
       });
-      setFormateurs(res.data.items || res.data);
-      setTotal(res.data.total || res.data.length || 0);
+  setFormateurs(res.data.items || res.data);
+  setTotal(res.data.total || res.data.length || 0);
       setSelected([]);
     } catch (err) {
       setError('Failed to fetch formateurs');
@@ -252,7 +252,7 @@ function Formateurs() {
           <button onClick={handleBulkDelete} disabled={selected.length===0} className="bulk-delete-btn">{t('Formateurs.bulk_delete','Delete Selected')}</button>
           <div className="pagination">
             <button onClick={()=>setPage(page-1)} disabled={page===1}><FaChevronLeft /></button>
-            <span>{t('common.page','Page')} {page} / {Math.ceil(total/pageSize)||1}</span>
+            <span>{t('common.page','Page')} {page} / {Math.max(1, Math.ceil(total/pageSize))}</span>
             <button onClick={()=>setPage(page+1)} disabled={page>=Math.ceil(total/pageSize)}><FaChevronRight /></button>
           </div>
         </div>

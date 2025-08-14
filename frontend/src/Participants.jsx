@@ -101,7 +101,7 @@ function Participants() {
       });
       if (Array.isArray(res.data)) {
         setParticipants(res.data);
-        setTotal(res.data.length < pageSize && page === 1 ? res.data.length : page * pageSize + (res.data.length === pageSize ? pageSize : 0));
+        setTotal(res.data.length);
       } else {
         setParticipants(res.data.items || res.data);
         setTotal(res.data.total || res.data.length || 0);
